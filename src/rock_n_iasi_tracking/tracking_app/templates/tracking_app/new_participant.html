@@ -1,0 +1,116 @@
+{% extends "tracking_app/base.html"%}
+{% block content %}
+{%load static%}
+<head>
+    <link rel="stylesheet" href="{%static 'visual/main.css'%}">
+    <script src="{% static 'tracking_app/qr-scanner.umd.min.js' %}"></script>
+    <script src="{% static 'tracking_app/qr-scanner-worker.min.js' %}"></script>
+</head>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <br>
+            <h2 class="text-center"> New participant </h2>
+            <br>
+            <form method="POST">
+            
+                <div class="text-center">
+                    {% csrf_token %}
+                    <h4>
+                        {{ form.qrcode_id.label_tag }}
+                        {{ form.qrcode_id }}
+                    </h4>
+                    
+                    <h4>
+                        {{ form.last_name.label_tag }}
+                        {{ form.last_name }}
+                        {{ form.last_name.errors }}    
+                    </h4>
+                    
+                    
+                    <br>
+                    
+                    
+                    <!--{{ form.first_name.label_tag }}
+                    {{ form.first_name }}
+                    {{ form.first_name.errors }}-->
+                    <h4>
+                        {{ form.qrcode_id.errors }}
+                        {% for error in form.non_field_errors %}
+                            <div style="color: red;">{{error}}</div>
+                        {% endfor %}
+                    </h4>
+                    
+
+                    <input type="submit" role="button" value="Add Participant" class="btn btn-primary btn-lg">
+                
+                    <br>
+                
+                    {% if name is not None %}
+                        <div style="color: green;"> {{ name }} is now registered </div>
+                    {% endif %}
+                    <video id="video-element" style="width:500px; height:500px;"></video>
+                    </div>
+                    
+            
+                
+            
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    //let lastScanned = document.getElementById("id_qrcode_id").value;
+    //console.log(lastScanned);
+    document.getElementById("id_qrcode_id").setAttribute("value", '');
+    document.getElementById("id_last_name").setAttribute("value", '');
+    //document.getElementById("id_last_name").setAttribute("autofocus", '');
+    let idCache = {};
+
+    function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+    }  
+
+    function on_detect(data) {
+        data = escapeHtml(data);
+        if(data in idCache)
+            return;
+
+        if(data == '')
+            return;
+                    
+        let inputTag = document.getElementById("id_qrcode_id");
+
+        inputTag.setAttribute("value", data);
+
+        idCache[data] = true;
+    }
+
+    QrScanner.WORKER_PATH = "{% static 'tracking_app/qr-scanner-worker.min.js' %}";
+
+    let videoElem = document.getElementById('video-element')
+
+    const qrScanner = new QrScanner(videoElem,
+        result => on_detect(result),
+        undefined,
+        () => {
+            return {
+                x: 0,
+                y: 0,
+                width: videoElem.width,
+                height: videoElem.height,
+                downScaledWidth: QrScanner._legacyCanvasSize,
+                downScaledHeight: QrScanner._legacyCanvasSize,
+            }
+        },
+    'user');
+    qrScanner.start();
+</script>
+{% endblock content %}

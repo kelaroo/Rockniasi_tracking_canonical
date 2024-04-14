@@ -1,0 +1,38 @@
+{% extends "tracking_app/base.html"%}
+{% block content %}
+
+<div class="container bg-gradient-custom">
+    <div class="row">
+        <div class='col col-6 offset-3 text-center'>
+            <br>
+            <br>
+            <h3> Login </h3>
+            <br>
+            <form method="POST">
+                {% csrf_token %}
+            
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+            
+                <br>
+            
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                {{ form.password.errors }}
+            
+                <br>
+                
+                {% for error in form.non_field_errors %}
+                    
+                    <div style="color: red;">{{error}}</div>
+                {% endfor %}
+            
+                <input type="submit" role="button" value="Login" class="btn btn-primary">
+            
+            </form>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "tracking_app/base.html"%}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col col-sm-4 offset-4 text-center">
+            <h3> Dashboard for {{ user.username }} </h3>
+            <br>
+            <a href="{% url 'new_participant' %}" type="button" role="button" class="btn btn-outline-info"> New participant </a>
+            <a href="{% url 'participants' %}" type="button" role="button" class="btn btn-outline-info"> All participants </a>
+        </div>
+        <br>
+        <div class="col col-sm-4 offset-4 text-center">
+            <h3>
+                Total participants: {{ totalNr }} <br>
+                Participants inside: {{ inside }}
+            </h3>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content%}

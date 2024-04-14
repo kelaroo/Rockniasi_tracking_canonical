@@ -1,0 +1,11 @@
+<nav>
+    <ul>
+        <li><a href="{% url 'index' %}"> Home </a></li>
+        <li><a href="{% url 'new_participant' %}"> Create participant </a></li>
+        <li><a href="{% url 'participants' %}"> All participants </a></li>
+        <li><a href="{% url 'entry' %}"> Entry/Exit </a></li>
+        <li><a href="{% url 'entry' %}"> Entry/Exit </a></li>
+    </ul>
+</nav>
+
+{% block content %} {% endblock %}

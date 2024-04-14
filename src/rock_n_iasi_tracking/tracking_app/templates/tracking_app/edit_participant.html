@@ -1,0 +1,29 @@
+{% extends "tracking_app/base.html" %}
+
+{% block content %}
+{%load static%}
+<h3> Edit {{ participant.id }}_{{ participant.last_name }} {{ participant.first_name }} </h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.qrcode_uuid.label_tag }}
+    {{ form.qrcode_uuid }}
+    <input type="submit">
+</form>
+
+{{ message }}
+
+<div>
+{% for date, objs in entries %}
+    {{ date }} <br>
+
+    <ul>
+    {% for entry in objs %}
+        <li> {{ entry.time|date:"G:i" }} {% if entry.exit %} exit {% else %} entry {% endif %} </li>
+    {% endfor %}
+    </ul>
+{% endfor %}
+</div>
+
+{% endblock %}
